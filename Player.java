@@ -12,6 +12,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
+import static sun.audio.AudioPlayer.player;
+
 public class Player {
     public static final float COLLISION_WIDTH = 40;
     public static final float COLLISION_HEIGHT = 80;
@@ -33,7 +35,7 @@ public class Player {
     private boolean amDucking = false;
     public static final int LEFT = 1, RIGHT = 2;
     private int dir = RIGHT;
-
+    private Player player;
     private static float COLLISION_RECT_WIDTH = 30;
     private static float COLLISION_RECT_HEIGHT = 30;
     //private Rectangle collisionRect;
@@ -42,6 +44,7 @@ public class Player {
     private int currentWeapon = SINGLE;
     private long shootDelay = 300; //1000 = 1 second
     private long lastShot;
+    public float launch;
 
 
     public Player(float x, float y, Texture t) {
@@ -59,6 +62,8 @@ public class Player {
         standing = regions[0];
         ducking = regions[3];
         jumping = regions[4];
+
+
     }
 
     public void updatePosition(float x, float y) {
@@ -71,9 +76,19 @@ public class Player {
         collisionRectangle.setPosition(x, y);
     }
 
+
+    public void restartLevel() {
+        updatePosition(110,110);
+   }
+
     public void update(float delta) {
         animationTimer += delta;
         Input input = Gdx.input;
+
+        if (input.isKeyJustPressed(Input.Keys.R)){
+            restartLevel();
+        }
+
         //right
         if (input.isKeyPressed(Input.Keys.RIGHT)) {
             xSpeed = MAX_X_SPEED;
@@ -111,6 +126,10 @@ public class Player {
         x += xSpeed;
         y += ySpeed;
         updateCollisionRectangle();
+    }
+
+    public void launch() {
+
     }
 
 
@@ -166,15 +185,20 @@ public class Player {
             lastShot = System.currentTimeMillis();
             Bullet b = new Bullet(x + COLLISION_WIDTH,
                     y + COLLISION_HEIGHT - 20);
-            if(dir == RIGHT)
+
+
+            if(dir == RIGHT){
                 b.setVelocity(200, 0);
-            else
+            }
+
+            else {
                 b.setVelocity(-200, 0);
+                b.setPosition(x, y + COLLISION_HEIGHT - 20);
+            }
 
             bullets.add(b);
 
         }
     }
-
 
 }
