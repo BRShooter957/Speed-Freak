@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,6 +24,7 @@ public class LoadingScreen implements Screen {
     private OrthographicCamera camera;
     private float progress = 0;
     private MyGdxGame game;
+    public Texture BulletImage;
 
 
     public LoadingScreen(MyGdxGame myGdxGame) {
@@ -44,12 +46,16 @@ public class LoadingScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
+        BulletImage = new Texture("Bullet right.png");
+
         game.getAssetManager().load("stage 1.tmx", TiledMap.class);
     }
     private void clearScreen() {
         Gdx.gl.glClearColor(0,0,.3f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
+
+
 
     @Override
     public void render(float delta) {
@@ -93,4 +99,3 @@ public class LoadingScreen implements Screen {
 
     }
 }
-
