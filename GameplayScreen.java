@@ -35,10 +35,19 @@ public class GameplayScreen implements Screen {
     private OrthogonalTiledMapRenderer mapRenderer;//2d map renderer
     Array<Bullet> playerBullets = new Array<Bullet>();
     private Player player;
+    private Enemy enemy;
+    Texture BulletImage;
 
     public GameplayScreen(MyGdxGame myGdxGame) {
+
+
+        BulletImage = new Texture("Bullet right.png");
+
         game = myGdxGame;
+
     }
+
+
 
     @Override
     public void show() {
@@ -61,6 +70,7 @@ public class GameplayScreen implements Screen {
         clearScreen();
         update(delta);
         player.update(delta);
+        enemy.update(delta);
         getUserInput();
         handlePlayerCollision();
 
@@ -70,22 +80,35 @@ public class GameplayScreen implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
+
+
+
         //batch.setProjectionMatrix(camera.projection);
         //batch.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         batch.begin();
+        batch.draw(BulletImage, 115,115);
+        player.draw(batch);
+        enemy.draw(batch);
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
         shapeRenderer.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         shapeRenderer.begin();
+
         player.drawDebug(shapeRenderer);
         for (int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
+        player.drawDebug(shapeRenderer);
+        enemy.drawDebug(shapeRenderer);
         shapeRenderer.end();
+
+
     }
+
+
 
     private void removeBulletsOffScreen() {
         for (int i = 0; i < playerBullets.size; i++) {
@@ -116,10 +139,13 @@ public class GameplayScreen implements Screen {
     }
 
     private void update(float delta){
+
+
         for (int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).update(delta);
         }
         player.update(delta);
+
         //removeBulletsOffScreen();
     }
 
@@ -149,7 +175,7 @@ public class GameplayScreen implements Screen {
     }
 
     private void getUserInput(){
-        if(Gdx.input.isKeyJustPressed (Input.Keys.SPACE)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.shoot(playerBullets);
         }
     }
@@ -208,6 +234,19 @@ public class GameplayScreen implements Screen {
             else if(collisionCell.getId() == 33) {
                 restartLevel();
             }
+            else if (collisionCell.getId() == 133) {
+                player.launch();
+            }
+            else if (collisionCell.getId() == 136) {
+                player.launch();
+            }
+            else if (collisionCell.getId() == 137) {
+                    player.launch();
+            }
+            if (collisionCell.getId() == 132) {
+                player.launch();
+            }
+
         }
 
         return cells;
@@ -216,6 +255,7 @@ public class GameplayScreen implements Screen {
     private void restartLevel() {
         player.updatePosition(110,110);
     }
+
 
     public void handlePlayerCollision() {
         Array<CollisionCell> playerCells = whichCellsDoesPlayerCover();
