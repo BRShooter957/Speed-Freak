@@ -1,12 +1,16 @@
 package com.lira.speedfreak;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
 public class Bullet {
+    private Texture image;
     private float x;
     private float y;
-    private static final float COLLISION_RADIUS =5f;
+    public static final float COLLISION_RADIUS =5f;
     private Circle collision_circle;
     private float xvel;
     private float yvel;
@@ -18,6 +22,9 @@ public class Bullet {
         collision_circle = new Circle(x,
                 y,
                 COLLISION_RADIUS);
+
+        image = new Texture("Bullet right.png");
+
     }
 
     public void setVelocity(float xvel, float yvel) {
@@ -25,9 +32,17 @@ public class Bullet {
         this.yvel = yvel;
     }
 
+
     public void update(float delta) {
         x += xvel * delta;
         y += yvel * delta;
+        collision_circle.setPosition(x,y);
+
+    }
+
+    public void setPosition(float x,float y) {
+        this.x = x;
+        this.y = y;
         collision_circle.setPosition(x,y);
     }
 
@@ -35,7 +50,18 @@ public class Bullet {
         shapeRenderer.circle(collision_circle.x,
                 collision_circle.y,
                 collision_circle.radius);
+
+
     }
+
+    public void draw(SpriteBatch spriteBatch){
+      spriteBatch.draw(image,x-image.getWidth()/2,
+               y-image.getHeight()/2);
+
+
+
+    }
+
 
     public float getX() {
         return x;
@@ -60,4 +86,5 @@ public class Bullet {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
-}
+
+   }
