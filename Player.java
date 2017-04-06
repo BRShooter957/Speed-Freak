@@ -188,12 +188,12 @@ public class Player {
 
             if(dir == RIGHT){
                 b.setVelocity(200, 0);
-                b.setPosition(x+COLLISION_WIDTH,y+COLLISION_HEIGHT/2);
+                b.setPosition(x+COLLISION_WIDTH,y+COLLISION_HEIGHT-30);
             }
 
             else {
                 b.setVelocity(-200, 0);
-                b.setPosition(x, y+COLLISION_HEIGHT/2);
+                b.setPosition(x, y+COLLISION_HEIGHT-30);
             }
 
             bullets.add(b);
