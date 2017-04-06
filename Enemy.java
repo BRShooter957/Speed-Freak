@@ -1,13 +1,10 @@
 package com.lira.speedfreak;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.assets.loaders.resolvers.AbsoluteFileHandleResolver;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
+
 /**
  * Created by llira18 on 2/15/2017.
  */
@@ -16,42 +13,56 @@ public class Enemy {
     public float y;
     public static final float COLLISION_WIDTH_ENEMY = 80;
     public static final float COLLISION_HEIGHT_ENEMY = 80;
-    protected Rectangle COLLISION_RECT_ENEMY;
+    protected Rectangle collisionRect;
     protected float speed = 100f;
-    protected static long shootdelay = 700;
-
+    private Texture enemyImage;
     public Enemy(float x, float y) {
-        x = 110;
-        y = 110;
         this.x = x;
         this.y = y;
-        COLLISION_RECT_ENEMY = new Rectangle(x,
+        collisionRect = new Rectangle(x,
                 y,
                 COLLISION_WIDTH_ENEMY,
                 COLLISION_HEIGHT_ENEMY);
-
+       // enemyImage = new Texture("");
     }
+
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+        updateEnemyCollisionRectangle();
+    }
+
+
+
     public void updatePosition (float x, float y) {
         this.x = x;
         this.y = y;
         updateEnemyCollisionRectangle();
     }
     public void updateEnemyCollisionRectangle() {
-        COLLISION_RECT_ENEMY.setPosition(x, y);
+        collisionRect.setPosition(x, y);
     }
-    public void drawDebug(ShapeRenderer shapeRenderer) {
-        shapeRenderer.rect(COLLISION_RECT_ENEMY.x,
-                COLLISION_RECT_ENEMY.y,
-                COLLISION_RECT_ENEMY.width,
-                COLLISION_RECT_ENEMY.height);
-    }
-    public Rectangle getEnemyCollisionRectangle() {
-        return COLLISION_RECT_ENEMY;
-    }
-    public void update(float delta) {
 
+
+    public void drawDebug(ShapeRenderer shapeRenderer) {
+        shapeRenderer.rect(collisionRect.x,
+                collisionRect.y,
+                collisionRect.width,
+                collisionRect.height);
     }
+
+
+    public Rectangle getEnemyCollisionRectangle() {
+        return collisionRect;
+    }
+
+
+    public void update(float delta) {
+        setPosition(150,150);
+    }
+
+
     public void draw(SpriteBatch spriteBatch){
-       // batch.draw(toDraw, x, y);
+        //batch.draw(toDraw, x, y);
     }
 }
