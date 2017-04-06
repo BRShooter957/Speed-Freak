@@ -40,7 +40,7 @@ public class Player {
     private static float COLLISION_RECT_HEIGHT = 30;
     //private Rectangle collisionRect;
     //private float speed = 6;
-    private static final int SINGLE = 1, DOUBLE = 2;
+    private static final int SINGLE = 1;
     private int currentWeapon = SINGLE;
     private long shootDelay = 300; //1000 = 1 second
     private long lastShot;
@@ -186,14 +186,14 @@ public class Player {
             Bullet b = new Bullet(x + COLLISION_WIDTH,
                     y + COLLISION_HEIGHT - 20);
 
-
             if(dir == RIGHT){
                 b.setVelocity(200, 0);
+                b.setPosition(x+COLLISION_WIDTH,y+COLLISION_HEIGHT/2);
             }
 
             else {
                 b.setVelocity(-200, 0);
-                b.setPosition(x, y + COLLISION_HEIGHT - 20);
+                b.setPosition(x, y+COLLISION_HEIGHT/2);
             }
 
             bullets.add(b);
