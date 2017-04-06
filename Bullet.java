@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 
 public class Bullet {
-    private Texture image;
+    public Texture bullet_Image;
     private float x;
     private float y;
     public static final float COLLISION_RADIUS =5f;
@@ -18,12 +18,12 @@ public class Bullet {
 
     public Bullet(float x, float y) {
         this.x = x;
-        this.y = y;
+        this.y = 0;
         collision_circle = new Circle(x,
                 y,
                 COLLISION_RADIUS);
 
-        image = new Texture("Bullet right.png");
+        bullet_Image = GameplayScreen.game.getAssetManager().get("Bullet right.png");
 
     }
 
@@ -55,11 +55,7 @@ public class Bullet {
     }
 
     public void draw(SpriteBatch spriteBatch){
-      spriteBatch.draw(image,x-image.getWidth()/2,
-               y-image.getHeight()/2);
-
-
-
+      spriteBatch.draw(bullet_Image,x-COLLISION_RADIUS, y-COLLISION_RADIUS);
     }
 
 
