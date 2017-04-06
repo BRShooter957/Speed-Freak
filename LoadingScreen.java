@@ -46,9 +46,8 @@ public class LoadingScreen implements Screen {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
 
-        BulletImage = new Texture("Bullet right.png");
-
         game.getAssetManager().load("stage 1.tmx", TiledMap.class);
+        game.getAssetManager().load("Bullet right.png", Texture.class);
     }
     private void clearScreen() {
         Gdx.gl.glClearColor(0,0,.3f,1);
