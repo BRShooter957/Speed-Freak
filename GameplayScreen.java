@@ -30,18 +30,17 @@ public class GameplayScreen implements Screen {
     private ShapeRenderer shapeRenderer; //draw shapes
     private OrthographicCamera camera; //the players view of the world
     private Viewport viewport; //control the view of the world
-    private MyGdxGame game;
+    public static MyGdxGame game;
     private TiledMap stage1;
     private OrthogonalTiledMapRenderer mapRenderer;//2d map renderer
     Array<Bullet> playerBullets = new Array<Bullet>();
     private Player player;
-    private Enemy enemy;
-    Texture BulletImage;
+    private Array<Enemy> enemies = new Array<Enemy>();
+   // float bulletcirclesX = 135;
+    //float bulletcirclesY = 135;
 
     public GameplayScreen(MyGdxGame myGdxGame) {
 
-
-        BulletImage = new Texture("Bullet right.png");
 
         game = myGdxGame;
 
@@ -63,6 +62,8 @@ public class GameplayScreen implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(stage1, batch);
         mapRenderer.setView(camera);
         player = new Player(200,100, (Texture)game.getAssetManager().get("tileset spreadsheet.png"));
+        enemies.add(new Enemy(200,100));
+        enemies.add(new Enemy(300,100));
     }
 
     @Override
@@ -70,7 +71,6 @@ public class GameplayScreen implements Screen {
         clearScreen();
         update(delta);
         player.update(delta);
-        enemy.update(delta);
         getUserInput();
         handlePlayerCollision();
 
@@ -87,9 +87,11 @@ public class GameplayScreen implements Screen {
         //batch.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         batch.begin();
-        batch.draw(BulletImage, 115,115);
-        player.draw(batch);
-        enemy.draw(batch);
+        //player.draw(batch);
+      //  enemy.draw(batch);
+        for (int i=0; i < playerBullets.size; i++) {
+            playerBullets.get(i).draw(batch);
+        }
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
@@ -101,8 +103,11 @@ public class GameplayScreen implements Screen {
         for (int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
-        player.drawDebug(shapeRenderer);
-        enemy.drawDebug(shapeRenderer);
+        for(int i=0; i < enemies.size; i++) {
+            enemies.get(i).drawDebug(shapeRenderer);
+        }
+        //player.drawDebug(shapeRenderer);
+      //  enemy.drawDebug(shapeRenderer);
         shapeRenderer.end();
 
 
@@ -140,6 +145,9 @@ public class GameplayScreen implements Screen {
 
     private void update(float delta){
 
+        for (int i = 0; i < playerBullets.size; i++) {
+            playerBullets.get(i).update(delta);
+        }
 
         for (int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).update(delta);
