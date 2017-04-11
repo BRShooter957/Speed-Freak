@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -36,8 +38,13 @@ public class GameplayScreen implements Screen {
     Array<Bullet> playerBullets = new Array<Bullet>();
     private Player player;
     private Array<Enemy> enemies = new Array<Enemy>();
+    private Array<Display> HUD = new Array<Display>();
+    private float timeCount;
+    private Integer worldTimer;
+    private Label countdownLabel;
    // float bulletcirclesX = 135;
     //float bulletcirclesY = 135;
+    private BitmapFont countdownTimer;
 
     public GameplayScreen(MyGdxGame myGdxGame) {
 
@@ -62,9 +69,11 @@ public class GameplayScreen implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(stage1, batch);
         mapRenderer.setView(camera);
         player = new Player(200,100, (Texture)game.getAssetManager().get("tileset spreadsheet.png"));
+       // timer
         enemies.add(new Enemy(200,100));
         enemies.add(new Enemy(300,100));
-    }
+        //countdownTimer = new BitmapFont(Gdx.files.internal("scoreFont.fnt"));
+        }
 
     @Override
     public void render(float delta) {
@@ -87,7 +96,8 @@ public class GameplayScreen implements Screen {
         //batch.setTransformMatrix(camera.view);
         //all graphics drawing goes here
         batch.begin();
-        //player.draw(batch);
+        player.draw(batch);
+//        countdownTimer.draw(batch, "Countdown:" + timeCount,225,600);
       //  enemy.draw(batch);
         for (int i=0; i < playerBullets.size; i++) {
             playerBullets.get(i).draw(batch);
@@ -154,6 +164,15 @@ public class GameplayScreen implements Screen {
         }
         player.update(delta);
 
+
+        timeCount += delta;
+            if(timeCount >= 10){
+                worldTimer--;
+
+               // countdownLabel.setText(String.format("%03d" , worldTimer));
+                player.restartLevel();
+            timeCount = 0;
+        }
         //removeBulletsOffScreen();
     }
 
@@ -245,15 +264,15 @@ public class GameplayScreen implements Screen {
             else if (collisionCell.getId() == 133) {
                 player.launch();
             }
-            else if (collisionCell.getId() == 136) {
-                player.launch();
-            }
-            else if (collisionCell.getId() == 137) {
-                    player.launch();
-            }
-            if (collisionCell.getId() == 132) {
-                player.launch();
-            }
+           // else if (collisionCell.getId() == 136) {
+               // player.launch();
+           // }
+            //else if (collisionCell.getId() == 137) {
+                  //  player.launch();
+           // }
+            //if (collisionCell.getId() == 132) {
+              //  player.launch();
+           // }
 
         }
 
@@ -262,6 +281,7 @@ public class GameplayScreen implements Screen {
 
     private void restartLevel() {
         player.updatePosition(110,110);
+        timeCount = 0;
     }
 
 
