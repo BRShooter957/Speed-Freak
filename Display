@@ -1,0 +1,26 @@
+package com.lira.speedfreak;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
+/**
+ * Created by llira18 on 4/10/2017.
+ */
+public class Display {
+
+    private float timeCount;
+    private Integer worldTimer;
+    private Label countdownLabel;
+
+
+
+
+    private void update(float delta) {
+
+        timeCount += delta;
+        if (timeCount >= 1) {
+            worldTimer--;
+            countdownLabel.setText(String.format("%03d", worldTimer));
+            timeCount = 0;
+        }
+    }
+}
