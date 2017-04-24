@@ -70,8 +70,9 @@ public class GameplayScreen implements Screen {
         mapRenderer.setView(camera);
         player = new Player(200, 100, (Texture) game.getAssetManager().get("tileset spreadsheet.png"));
         // timer
-        enemies.add(new Enemy(200, 100));
-        enemies.add(new Enemy(300, 100));
+        enemies.add(new Enemy(2080, 320));
+        enemies.add(new Enemy(4960, 80));
+        enemies.add(new Enemy(2480, 1600));
         countdownTimer = new BitmapFont(Gdx.files.internal("timer_font.fnt"));
     }
 
@@ -254,9 +255,15 @@ public class GameplayScreen implements Screen {
                 iter.remove();
             } else if (collisionCell.getId() == 3) {
                 iter.remove();
-            } else if (collisionCell.getId() == 5) {
-                iter.remove();
             } else if (collisionCell.getId() == 33) {
+                iter.remove();
+            } else if (collisionCell.getId() == 34) {
+                iter.remove();
+            } else if (collisionCell.getId() == 35) {
+                iter.remove();
+            } else if (collisionCell.getId() == 36) {
+                iter.remove();
+            } else if (collisionCell.getId() == 1) {
                 restartLevel();
             } else if (collisionCell.getId() == 133) {
                 player.launch();
@@ -277,7 +284,7 @@ public class GameplayScreen implements Screen {
     }
 
     private void restartLevel() {
-        player.updatePosition(110, 110);
+        player.updatePosition(200, 230);
         timeCount = 0;
     }
 
