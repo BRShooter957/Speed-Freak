@@ -3,12 +3,15 @@ package com.lira.speedfreak;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by llira18 on 2/15/2017.
  */
 public class Enemy {
+    protected Array<Enemy> enemies;
     public float x;
     public float y;
     public static final float COLLISION_WIDTH_ENEMY = 80;
@@ -51,6 +54,12 @@ public class Enemy {
                 collisionRect.height);
     }
 
+    public boolean isPlayerColliding(Player player) {
+        Rectangle playerCollisionRectangle = player.getCollisionRectangle();
+        return Intersector.overlaps(playerCollisionRectangle,getEnemyCollisionRectangle() );
+
+    }
+
 
     public Rectangle getEnemyCollisionRectangle() {
         return collisionRect;
@@ -65,4 +74,20 @@ public class Enemy {
     public void draw(SpriteBatch spriteBatch){
         //batch.draw(toDraw, x, y);
     }
-}
+
+    public void checkForhit(Bullet b) {
+        for (int i=0; i < enemies.size; i++) {
+           // if (enemies.get(i).isHit(b)) {
+                enemies.removeIndex(i);
+                i--;
+                b.setAlive(false);
+            }
+        }
+    }
+    //do later
+    //public void isHit(Bullet b) {
+        //return Intersector.overlaps (collisionRect,
+               // b.getCollision_circle());
+
+    //}
+
