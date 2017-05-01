@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -17,9 +19,9 @@ import static sun.audio.AudioPlayer.player;
 public class Player {
     public static final float COLLISION_WIDTH = 40;
     public static final float COLLISION_HEIGHT = 80;
-    private static final float MAX_X_SPEED = 10;
-    private static final float MAX_Y_SPEED = 5;
-    private static final float MAX_JUMP_DISTANCE = 8 * COLLISION_HEIGHT;
+    private static final float MAX_X_SPEED = 8;
+    private static final float MAX_Y_SPEED = 3;
+    private static final float MAX_JUMP_DISTANCE = 1.5f * COLLISION_HEIGHT;
     private Rectangle collisionRectangle;
     private float x;
     private float y;
@@ -42,9 +44,22 @@ public class Player {
     //private float speed = 6;
     private static final int SINGLE = 1;
     private int currentWeapon = SINGLE;
-    private long shootDelay = 300; //1000 = 1 second
+    private long shootDelay = 1; //1000 = 1 second
     private long lastShot;
     public float launch;
+    public float bulletCount = 2;
+
+    //Running animation (RL = running left) (RR = running right)
+    private TextureRegion leftImageRL;
+    private TextureRegion middleImageRL;
+    private TextureRegion rightImageRL;
+    private TextureRegion leftImageRR;
+    private TextureRegion middleImageRR;
+    private TextureRegion rightImageRR;
+
+    //Idle image (FL = facing left) (FR = facing right)
+    private TextureRegion IdleFL;
+    private TextureRegion IdleFR;
 
 
     public Player(float x, float y, Texture t) {
@@ -55,6 +70,8 @@ public class Player {
         collisionRectangle = new Rectangle(x, y,
                 COLLISION_WIDTH,
                 COLLISION_HEIGHT);
+        Texture spriteSheet = new Texture("IdleRight.png");
+
         TextureRegion[] regions = TextureRegion.split(t, (int) COLLISION_WIDTH,
                 (int) COLLISION_HEIGHT)[0];
         walking = new Animation(0.25f, regions[1], regions[2]);
@@ -65,6 +82,7 @@ public class Player {
 
 
     }
+
 
     public void updatePosition(float x, float y) {
         this.x = x;
@@ -78,14 +96,14 @@ public class Player {
 
 
     public void restartLevel() {
-        updatePosition(110,110);
-   }
+        updatePosition(110, 110);
+    }
 
     public void update(float delta) {
         animationTimer += delta;
         Input input = Gdx.input;
 
-        if (input.isKeyJustPressed(Input.Keys.R)){
+        if (input.isKeyJustPressed(Input.Keys.R)) {
             restartLevel();
         }
 
@@ -129,7 +147,8 @@ public class Player {
     }
 
     public void launch() {
-
+        blockJump = false;
+        jumpYDistance = 8;
     }
 
 
@@ -175,6 +194,9 @@ public class Player {
 
         batch.draw(toDraw, x, y);
     }
+    public void subtractBullets(){
+
+    }
 
     public Rectangle getCollisionRectangle() {
         return collisionRectangle;
@@ -186,19 +208,19 @@ public class Player {
             Bullet b = new Bullet(x + COLLISION_WIDTH,
                     y + COLLISION_HEIGHT - 20);
 
-            if(dir == RIGHT){
+            if (dir == RIGHT) {
                 b.setVelocity(200, 0);
-                b.setPosition(x+COLLISION_WIDTH,y+COLLISION_HEIGHT-30);
-            }
-
-            else {
+                b.setPosition(x + COLLISION_WIDTH, y + COLLISION_HEIGHT - 30);
+            } else {
                 b.setVelocity(-200, 0);
-                b.setPosition(x, y+COLLISION_HEIGHT-30);
+                b.setPosition(x, y + COLLISION_HEIGHT - 30);
             }
 
             bullets.add(b);
 
+
         }
+
     }
 
 }
