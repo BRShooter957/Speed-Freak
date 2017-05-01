@@ -132,7 +132,7 @@ public class GameplayScreen implements Screen {
         for (int i = 0; i < playerBullets.size; i++) {
             Bullet b = playerBullets.get(i);
 
-            if (b.getY() > WORLD_HEIGHT) {
+            if (b.getY() > WORLD_HEIGHT+2160) {
                 playerBullets.removeIndex(i);
                 i--;
             } else if (b.getY() + b.getDiameter() < 0) {
@@ -141,7 +141,7 @@ public class GameplayScreen implements Screen {
             } else if (b.getX() + b.getDiameter() < 0) {
                 playerBullets.removeIndex(i);
                 i--;
-            } else if (b.getX() > WORLD_WIDTH) {
+            } else if (b.getX() > WORLD_WIDTH+3840) {
                 playerBullets.removeIndex(i);
                 i--;
             } else if (b.isAlive() == false) {
@@ -167,46 +167,62 @@ public class GameplayScreen implements Screen {
         }
         player.update(delta);
 
-
-        timeCount += delta;
-        if (timeCount >= 50) {
-            //countdownLabel.setText(String.format("%03d" , worldTimer));
-            player.restartLevel();
-            timeCount = 0;
+        if (checkForCollision()) {
+            //crashSound.play();
+            restartLevel();
+            //game.setScreen(new startScreen(game));
         }
 
-        //removeBulletsOffScreen();
-    }
+            timeCount += delta;
+            if (timeCount >= 50) {
+                //countdownLabel.setText(String.format("%03d" , worldTimer));
+                player.restartLevel();
+                timeCount = 0;
+            }
 
-    @Override
-    public void resize(int width, int height) {
-        viewport.update(width, height);
-    }
+            removeBulletsOffScreen();
+        }
 
-    @Override
-    public void pause() {
 
-    }
+        @Override
+        public void resize ( int width, int height){
+            viewport.update(width, height);
+        }
 
-    @Override
-    public void resume() {
+        @Override
+        public void pause () {
 
-    }
+        }
 
-    @Override
-    public void hide() {
+        @Override
+        public void resume () {
 
-    }
+        }
 
-    @Override
-    public void dispose() {
+        @Override
+        public void hide () {
 
-    }
+        }
+
+        @Override
+        public void dispose () {
+
+        }
 
     private void getUserInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             player.shoot(playerBullets);
+
         }
+    }
+
+    public boolean checkForCollision() {
+        for (int i = 0; i < enemies.size; i++) {
+            if (enemies.get(i).isPlayerColliding(player)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Array<CollisionCell> whichCellsDoesPlayerCover() {
@@ -265,18 +281,11 @@ public class GameplayScreen implements Screen {
                 iter.remove();
             } else if (collisionCell.getId() == 1) {
                 restartLevel();
+            } else if (collisionCell.getId() == 132) {
+                player.launch();
             } else if (collisionCell.getId() == 133) {
                 player.launch();
             }
-            // else if (collisionCell.getId() == 136) {
-            // player.launch();
-            // }
-            //else if (collisionCell.getId() == 137) {
-            //  player.launch();
-            // }
-            //if (collisionCell.getId() == 132) {
-            //  player.launch();
-            // }
 
         }
 
@@ -320,4 +329,18 @@ public class GameplayScreen implements Screen {
             }
         }
     }
+
+    private void checkForEnemyCollision() {
+        //for every player bullet
+        for (int i=0; i < playerBullets.size; i++) {
+            //for revery enemy wave
+            for (int j=0; j < enemies.size; j++) {
+                enemies.get(j).checkForhit(playerBullets.get(i));
+            }
+        }
+    }
+
+
+
+
 }
