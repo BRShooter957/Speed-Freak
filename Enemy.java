@@ -17,8 +17,8 @@ public class Enemy {
     public static final float COLLISION_WIDTH_ENEMY = 80;
     public static final float COLLISION_HEIGHT_ENEMY = 80;
     protected Rectangle collisionRect;
-    protected float speed = 100f;
     private Texture enemyImage;
+
     public Enemy(float x, float y) {
         this.x = x;
         this.y = y;
@@ -26,7 +26,8 @@ public class Enemy {
                 y,
                 COLLISION_WIDTH_ENEMY,
                 COLLISION_HEIGHT_ENEMY);
-       // enemyImage = new Texture("");
+        enemyImage = GameplayScreen.game.getAssetManager().get("EnemyImage.png");
+
     }
 
     public void setPosition(float x, float y) {
@@ -36,12 +37,12 @@ public class Enemy {
     }
 
 
-
-    public void updatePosition (float x, float y) {
+    public void updatePosition(float x, float y) {
         this.x = x;
         this.y = y;
         updateEnemyCollisionRectangle();
     }
+
     public void updateEnemyCollisionRectangle() {
         collisionRect.setPosition(x, y);
     }
@@ -56,7 +57,7 @@ public class Enemy {
 
     public boolean isPlayerColliding(Player player) {
         Rectangle playerCollisionRectangle = player.getCollisionRectangle();
-        return Intersector.overlaps(playerCollisionRectangle,getEnemyCollisionRectangle() );
+        return Intersector.overlaps(playerCollisionRectangle, getEnemyCollisionRectangle());
 
     }
 
@@ -67,27 +68,33 @@ public class Enemy {
 
 
     public void update(float delta) {
-        setPosition(150,150);
+        setPosition(150, 150);
     }
 
 
-    public void draw(SpriteBatch spriteBatch){
-        //batch.draw(toDraw, x, y);
+    public void draw(SpriteBatch spriteBatch) {
+        spriteBatch.draw(enemyImage, x , y);
     }
+
+
 
     public void checkForhit(Bullet b) {
         for (int i=0; i < enemies.size; i++) {
-           // if (enemies.get(i).isHit(b)) {
+            if (enemies.get(i).isHit(b)) {
                 enemies.removeIndex(i);
                 i--;
                 b.setAlive(false);
             }
         }
     }
-    //do later
-    //public void isHit(Bullet b) {
-        //return Intersector.overlaps (collisionRect,
-               // b.getCollision_circle());
 
-    //}
+    //do later
+    public boolean isHit(Bullet b) {
+        return Intersector.overlaps(b.getCollision_circle(),
+                   collisionRect);
+
+    }
+}
+
+
 
