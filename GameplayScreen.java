@@ -99,13 +99,18 @@ public class GameplayScreen implements Screen {
 
         //all graphics drawing goes here
         batch.begin();
-        //player.draw(batch);
-//        countdownTimer.draw(batch, "Countdown:" + timeCount,225,600);
-        //  enemy.draw(batch);
+
+       //enemy.draw(batch);
+
+        player.draw(batch);
         for (int i = 0; i < playerBullets.size; i++) {
             playerBullets.get(i).draw(batch);
         }
-        countdownTimer.draw(batch, "" + (50 - timeCount), worldCoords.x, worldCoords.y);
+
+        for (int i = 0; i < enemies.size; i++){
+            enemies.get(i).draw(batch);
+        }
+        countdownTimer.draw(batch, "Time:" + (50 - timeCount), worldCoords.x, worldCoords.y);
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
@@ -117,9 +122,9 @@ public class GameplayScreen implements Screen {
         for (int i = 0; i < playerBullets.size; i++) {
             playerBullets.get(i).drawDebug(shapeRenderer);
         }
-        for (int i = 0; i < enemies.size; i++) {
-            enemies.get(i).drawDebug(shapeRenderer);
-        }
+       // for (int i = 0; i < enemies.size; i++) {
+        //    enemies.get(i).drawDebug(shapeRenderer);
+        //}
         //player.drawDebug(shapeRenderer);
         //  enemy.drawDebug(shapeRenderer);
         shapeRenderer.end();
@@ -162,10 +167,9 @@ public class GameplayScreen implements Screen {
             playerBullets.get(i).update(delta);
         }
 
-        for (int i = 0; i < playerBullets.size; i++) {
-            playerBullets.get(i).update(delta);
-        }
+
         player.update(delta);
+
 
         if (checkForCollision()) {
             //crashSound.play();
@@ -179,8 +183,8 @@ public class GameplayScreen implements Screen {
                 player.restartLevel();
                 timeCount = 0;
             }
-
-            removeBulletsOffScreen();
+        //checkForEnemyCollision();
+        removeBulletsOffScreen();
         }
 
 
@@ -210,8 +214,11 @@ public class GameplayScreen implements Screen {
         }
 
     private void getUserInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.shoot(playerBullets);
+            player.subtractBullets();
+
+
 
         }
     }
@@ -333,7 +340,7 @@ public class GameplayScreen implements Screen {
     private void checkForEnemyCollision() {
         //for every player bullet
         for (int i=0; i < playerBullets.size; i++) {
-            //for revery enemy wave
+            //for every enemy wave
             for (int j=0; j < enemies.size; j++) {
                 enemies.get(j).checkForhit(playerBullets.get(i));
             }
