@@ -48,6 +48,7 @@ public class LoadingScreen implements Screen {
 
         game.getAssetManager().load("stage 1.tmx", TiledMap.class);
         game.getAssetManager().load("Bullet right.png", Texture.class);
+        game.getAssetManager().load("EnemyImage.png", Texture.class);
     }
     private void clearScreen() {
         Gdx.gl.glClearColor(0,0,.3f,1);
