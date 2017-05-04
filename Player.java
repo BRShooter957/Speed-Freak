@@ -31,20 +31,18 @@ public class Player {
     private float jumpYDistance = 0;
     private Animation walking;
     private TextureRegion jumping;
-    private TextureRegion standing;
-    private TextureRegion ducking;
+    private TextureRegion lookingLeft;
+    private TextureRegion lookingRight;
     private float animationTimer = 0;
     private boolean amDucking = false;
     public static final int LEFT = 1, RIGHT = 2;
     private int dir = RIGHT;
     private Player player;
-    private static float COLLISION_RECT_WIDTH = 30;
-    private static float COLLISION_RECT_HEIGHT = 30;
     //private Rectangle collisionRect;
     //private float speed = 6;
     private static final int SINGLE = 1;
     private int currentWeapon = SINGLE;
-    private long shootDelay = 1; //1000 = 1 second
+    private long shootDelay = 500; //1000 = 1 second
     private long lastShot;
     public float launch;
     public float bulletCount = 2;
@@ -76,11 +74,9 @@ public class Player {
                 (int) COLLISION_HEIGHT)[0];
         walking = new Animation(0.25f, regions[1], regions[2]);
         walking.setPlayMode(Animation.PlayMode.LOOP);
-        standing = regions[0];
-        ducking = regions[3];
+        lookingLeft= regions[0];
+        lookingRight = regions[3];
         jumping = regions[4];
-
-
     }
 
 
@@ -174,28 +170,27 @@ public class Player {
     }
 
     public void draw(SpriteBatch batch) {
-        TextureRegion toDraw = standing;
+        //TextureRegion toDraw = lookingRight;
 
-        if (xSpeed == 0 && amDucking) {
-            toDraw = ducking;
+        //if (xSpeed == 0 && amDucking) {
+            //toDraw = jumping;
         }
 
-        if (ySpeed != 0) {
-            toDraw = jumping;
-        } else if (xSpeed > 0) {
-            toDraw = walking.getKeyFrame(animationTimer);
-            if (toDraw.isFlipX())
-                toDraw.flip(true, false);
-        } else if (xSpeed < 0) {
-            toDraw = walking.getKeyFrame(animationTimer);
-            if (!toDraw.isFlipX())
-                toDraw.flip(true, false);
-        }
+        //if (ySpeed != 0) {
+            //toDraw = jumping;
+        //} else if (xSpeed > 0) {
+          //  toDraw = walking.getKeyFrame(animationTimer);
+          //  if (toDraw.isFlipX())
+                //toDraw.flip(true, false);
+        //} else if (xSpeed < 0) {
+          //  toDraw = walking.getKeyFrame(animationTimer);
+          //  if (!toDraw.isFlipX())
+          //      toDraw.flip(true, false);
+        //}
 
-        batch.draw(toDraw, x, y);
-    }
+        //batch.draw(toDraw, x, y);
+    //}
     public void subtractBullets(){
-
     }
 
     public Rectangle getCollisionRectangle() {
@@ -209,10 +204,10 @@ public class Player {
                     y + COLLISION_HEIGHT - 20);
 
             if (dir == RIGHT) {
-                b.setVelocity(200, 0);
+                b.setVelocity(150, 0);
                 b.setPosition(x + COLLISION_WIDTH, y + COLLISION_HEIGHT - 30);
             } else {
-                b.setVelocity(-200, 0);
+                b.setVelocity(-150, 0);
                 b.setPosition(x, y + COLLISION_HEIGHT - 30);
             }
 
